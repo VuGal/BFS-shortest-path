@@ -17,12 +17,10 @@ class BFS {
 
         void PrintPath();
 
-    protected:
-
     private:
         enum class Result { verticesError, pathNotFound, success };
         Result result {};
-        int startingVertex {};
+        int pseudoStartingVertex { -100 };
         int destinationVertex {};
         std::map<int, std::vector<int>> adjacencyList {};
         std::map<int, int> predecessorList {};

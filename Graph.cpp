@@ -2,13 +2,13 @@
 #include "Graph.h"
 
 
-// constructor/destructor
+// CONSTRUCTOR/DESTRUCTOR
 
 Graph::Graph(File file) {
 
     std::vector<std::string> fileLines = file.GetFileLines();
 
-    for (size_t vertexData=3; vertexData < fileLines.size(); ++vertexData) {
+    for (size_t vertexData=2; vertexData < fileLines.size(); ++vertexData) {
         AddVertex(fileLines[vertexData]);
     }
 
@@ -21,14 +21,16 @@ Graph::Graph(File file) {
 Graph::~Graph() {}
 
 
-// public methods
+// PUBLIC METHODS
 
+// getter for adjacency list which is vertices-neighbors map
 std::map<int, std::vector<int>> Graph::getAdjacencyList() const {
 
     return adjacencyList;
 
 }
 
+// getter for starting vertices
 std::vector<int> Graph::getStartingVertices() const {
 
     return startingVertices;
@@ -36,8 +38,12 @@ std::vector<int> Graph::getStartingVertices() const {
 }
 
 
-// private methods
+// PRIVATE METHODS
 
+/*
+    takes the file line containing the vertex info as a parameter
+    and parses it (adds it to adjacencyList)
+*/
 void Graph::AddVertex(std::string vertexData) {
 
     std::vector<int> adjacentVertices {};
@@ -56,6 +62,11 @@ void Graph::AddVertex(std::string vertexData) {
 
 }
 
+/*
+    takes the file line containing the starting vertices as a parameter
+    and parses it (checks if all vertices belong to the graph, then adds
+    the vertices to startingVertices)
+*/
 void Graph::SetStartingVertices(std::string startingVerticesLine) {
 
     std::istringstream iss(startingVerticesLine);
@@ -77,8 +88,13 @@ void Graph::SetStartingVertices(std::string startingVerticesLine) {
 
 }
 
+// checks if all neighbors belong to the graph
 void Graph::CheckAdjacencyListCorrectness() {
 
+    /*
+        traverses the adjacencyList only once while saving keys and values to sets,
+        then checks if values (neighbors) are a subset of keys (graph vertices)
+    */
     std::set<int> keys {};
     std::set<int> values {};
 

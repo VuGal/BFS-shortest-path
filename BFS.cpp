@@ -2,6 +2,8 @@
 #include "BFS.h"
 
 
+// CONSTRUCTOR/DESTRUCTOR
+
 BFS::BFS(Graph graph, File file) {
 
     PrepareData(graph, file);
@@ -12,6 +14,9 @@ BFS::BFS(Graph graph, File file) {
 BFS::~BFS() {}
 
 
+// PUBLIC METHODS
+
+// prints number of walls to be destroyed, starting vertex and found path
 void BFS::PrintPath() {
 
     if (result == Result::pathNotFound) {
@@ -21,39 +26,38 @@ void BFS::PrintPath() {
 
     std::cout << "Aby dostac sie do punktu dowodzenia nalezy zburzyc " << distanceList[destinationVertex] << " scian.\n\n";
 
+    // prints the real starting vertex (the last one is pseudo starting vertex so it needs to print the one before)
+    std::cout << "Nalezy rozpoczac od wierzcholka " << foundPath[foundPath.size()-2] << ".\n\n";
+
     std::cout << "Odnaleziona trasa:\n";
 
-    for (std::vector<int>::reverse_iterator it = foundPath.rbegin(); it != foundPath.rend()-1; ++it) {
+    // foundPath needs to be printed in reverse, because of the way the vertices were added to this vector in BFS::ExecuteAlgorithm();
+    // it starts from foundPath.rbegin()+1 to avoid printing pseudo starting vertex
+    for (std::vector<int>::reverse_iterator it = foundPath.rbegin()+1; it != foundPath.rend()-1; ++it) {
         std::cout << *it << " -> ";
     }
     std::cout << foundPath[0] << "\n\n";
 
 }
 
+
+// PRIVATE METHODS
+
+// initializes needed variables and performs checks
 void BFS::PrepareData(Graph graph, File file) {
 
     adjacencyList = graph.getAdjacencyList();
-
-    std::string startingVertexString = file.GetFileLines()[1];
     std::vector<int> startingVertices = graph.getStartingVertices();
 
-    if (startingVertexString.find(' ') != std::string::npos) {
-        result = Result::verticesError;
-        std::cout << "Podano wiecej niz jeden wierzcholek startowy!\n";
-        return;
-    }
-
-   startingVertex = std::stoi(startingVertexString);
-
-    if (std::find(startingVertices.begin(), startingVertices.end(), startingVertex) != startingVertices.end()) {
-        result = Result::success;
-    }
-    else {
-        std::cout << "Podany wierzcholek startowy nie nalezy do zbioru S!\n";
-    }
+    /*
+        adds pseudo starting vertex to adjacency list
+        (it's connected to all starting vertices and
+         needed to find the optimal starting vertex)
+    */
+    adjacencyList[pseudoStartingVertex] = startingVertices;
 
 
-    std::string destinationVertexString = file.GetFileLines()[2];
+    std::string destinationVertexString = file.GetFileLines()[1];
 
     if (destinationVertexString.find(' ') != std::string::npos) {
         result = Result::verticesError;
@@ -70,6 +74,8 @@ void BFS::PrepareData(Graph graph, File file) {
         std::cout << "Podany wierzcholek koncowy nie nalezy do grafu!\n";
     }
 
+
+    // initializes all vertices data to defaults
     for (auto & [vertex, neighbors] : adjacencyList) {
         predecessorList[vertex] = -1;
         distanceList[vertex] = INT_MAX;
@@ -78,13 +84,25 @@ void BFS::PrepareData(Graph graph, File file) {
 
 }
 
+/*
+    performs the modified BFS algorithm
+    (creates a tree with BFS, but saves their predecessors
+    and distance from the starting vertex)
+*/
 void BFS::ExecuteAlgorithm() {
 
-    distanceList[startingVertex] = 0;
-    isVisitedList[startingVertex] = 1;
-    toBeCheckedList.push_back(startingVertex);
+
+    // initializes pseudo starting vertex
+    distanceList[pseudoStartingVertex] = -1;
+    isVisitedList[pseudoStartingVertex] = 1;
+    toBeCheckedList.push_back(pseudoStartingVertex);
 
 
+    /*
+       modified BFS (increments distance with every hop;
+       starting vertices have distance equal to 0 and
+       pseudo starting vertex has distance equal to -1)
+    */
     int currentVertex {};
     while (!toBeCheckedList.empty()) {
 

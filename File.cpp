@@ -2,7 +2,7 @@
 #include "File.h"
 
 
-// constructor/destructor
+// CONSTRUCTOR/DESTRUCTOR
 
 File::File(std::string filePath) {
 
@@ -13,8 +13,9 @@ File::File(std::string filePath) {
 File::~File() {}
 
 
-//  public methods
+// PUBLIC METHODS
 
+// getter for file contents saved in memory
 std::vector<std::string> File::GetFileLines() const {
 
     return fileLines;
@@ -22,8 +23,12 @@ std::vector<std::string> File::GetFileLines() const {
 }
 
 
-// private functions
+// PRIVATE METHODS
 
+/*
+    checks if the file consists only of numbers and spaces and it doesn't
+    contain empty lines; after the checks it save the file contents to memory
+*/
 void File::ParseFile(std::string filePath) {
 
     std::string currentLine;
@@ -42,7 +47,7 @@ void File::ParseFile(std::string filePath) {
             }
             for (auto const &ch : currentLine) {
                 charsOk = 0;
-                for (int i = 0; i < allowedChars.size(); ++i) {
+                for (size_t i = 0; i < allowedChars.size(); ++i) {
                     if (ch == allowedChars[i]) charsOk = 1;
                 }
                 if (!charsOk) {

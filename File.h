@@ -14,8 +14,6 @@ class File {
 
         std::vector <std::string> GetFileLines() const;
 
-    protected:
-
     private:
         std::vector<std::string> fileLines {};
 

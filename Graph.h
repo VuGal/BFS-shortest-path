@@ -20,8 +20,6 @@ class Graph {
         std::map<int, std::vector<int>> getAdjacencyList() const;
         std::vector<int> getStartingVertices() const;
 
-    protected:
-
     private:
         std::map<int, std::vector<int>> adjacencyList {};
         std::vector<int> startingVertices {};
