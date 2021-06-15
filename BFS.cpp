@@ -21,7 +21,7 @@ void BFS::PrintPath() {
 
     if (result == Result::pathNotFound) {
         std::cout << "Sciezka pomiedzy wierzcholkiem poczatkowym a koncowym nie istnieje!\n";
-        return;
+        throw -1;
     }
 
     std::cout << "Aby dostac sie do punktu dowodzenia nalezy zburzyc " << distanceList[destinationVertex] << " scian.\n\n";
@@ -62,7 +62,7 @@ void BFS::PrepareData(Graph graph, File file) {
     if (destinationVertexString.find(' ') != std::string::npos) {
         result = Result::verticesError;
         std::cout << "Podano wiecej niz jeden wierzcholek koncowy!\n";
-        return;
+        throw -1;
     }
 
     destinationVertex = std::stoi(destinationVertexString);

@@ -26,8 +26,8 @@ std::vector<std::string> File::GetFileLines() const {
 // PRIVATE METHODS
 
 /*
-    checks if the file consists only of numbers and spaces and it doesn't
-    contain empty lines; after the checks it save the file contents to memory
+    checks if the file consists only of numbers and spaces, has at least 3 lines
+    and doesn't contain empty lines; after the checks it saves the file contents to memory
 */
 void File::ParseFile(std::string filePath) {
 
@@ -36,6 +36,8 @@ void File::ParseFile(std::string filePath) {
 
     std::array<char, 12> allowedChars { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', ' ' };
 
+    int linesCounter {0};
+
     if (file.is_open()) {
 
         while (getline (file, currentLine)) {
@@ -43,7 +45,7 @@ void File::ParseFile(std::string filePath) {
             bool charsOk {0};
             if (currentLine.size() == 0) {
                 std::cout << "Plik zawiera co najmniej jedna pusta linie!\n";
-                return;
+                throw -1;
             }
             for (auto const &ch : currentLine) {
                 charsOk = 0;
@@ -52,7 +54,7 @@ void File::ParseFile(std::string filePath) {
                 }
                 if (!charsOk) {
                     std::cout << "Plik zawiera niedozwolone znaki!\n";
-                    return;
+                    throw -1;
                 }
             }
 
@@ -65,14 +67,19 @@ void File::ParseFile(std::string filePath) {
             }
             if (!emptyLine) {
                 std::cout << "Plik zawiera co najmniej jedna pusta linie!\n";
-                return;
+                throw -1;
             }
 
+            ++linesCounter;
             fileLines.push_back(currentLine);
 
         }
 
-        file.close();
+        if (linesCounter >= 3) file.close();
+        else {
+            std::cout << "Plik zawiera mniej niz 3 linie!\n";
+            throw -1;
+        }
 
     }
 

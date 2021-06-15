@@ -82,7 +82,7 @@ void Graph::SetStartingVertices(std::string startingVerticesLine) {
         }
         else {
             std::cout << "Co najmniej jeden wierzcholek ze zbioru S nie nalezy do grafu!\n";
-            return;
+            throw -1;
         }
     }
 
@@ -110,7 +110,7 @@ void Graph::CheckAdjacencyListCorrectness() {
 
     if (!std::includes(keys.begin(), keys.end(), values.begin(), values.end())) {
         std::cout << "Przynajmniej jeden ze zdefiniowanych sasiadow nie nalezy do grafu!\n";
-        return;
+        throw -1;
     }
 
 }
