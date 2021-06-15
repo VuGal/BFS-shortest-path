@@ -7,18 +7,26 @@
 
 int main () {
 
-    // opens file and saves its contents to memory
-    File file("graph.txt");
+    try {
 
-    // creates graph structure from file contents
-    Graph graph(file);
+        // opens file and saves its contents to memory
+        File file("graph.txt");
 
-    // performs the modified BFS algorithm
-    BFS bfs(graph, file);
+        // creates graph structure from file contents
+        Graph graph(file);
 
-    // print starting vertex, number of walls to destroy and found path
-    bfs.PrintPath();
+        // performs the modified BFS algorithm
+        BFS bfs(graph, file);
 
+        // print starting vertex, number of walls to destroy and found path
+        bfs.PrintPath();
+
+    }
+    catch(...) {
+
+        std::cout << "Wystapil blad w dzialaniu programu!\n";
+
+    }
 
     // prevents console from closing instantly
     std::getchar();
